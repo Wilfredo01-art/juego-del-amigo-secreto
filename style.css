@@ -87,24 +87,7 @@ body {
     font-size: 16px;
 }
 
-.button-container {
-    width: 300px;
-    justify-content: center;
-}
-
-/* Estilos de entrada de texto */
-.input-title {
-    flex: 1;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 2px solid #333;
-    border-right: none;
-    border-radius: 25px 0 0 25px;
-    font-family: "Merriweather", serif;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilos de botón */
+/* Estilos de botones */
 button {
     padding: 15px 30px;
     font-family: "Inter", sans-serif;
@@ -125,6 +108,39 @@ button {
     background-color: #a1a1a1;
 }
 
+/* Botones de acción */
+.button-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.button-draw {
+    display: flex;
+    align-items: center;
+    color: var(--color-white);
+    background-color: var(--color-button);
+    font-size: 16px;
+}
+
+.button-draw img {
+    margin-right: 10px;
+}
+
+.button-draw:hover {
+    background-color: var(--color-button-hover);
+}
+
+/* Botón de reinicio */
+.button-reset {
+    background-color: #ff4747;
+    color: var(--color-white);
+}
+
+.button-reset:hover {
+    background-color: #cc3a3a;
+}
+
 /* Listas */
 ul {
     list-style-type: none;
@@ -142,21 +158,8 @@ ul {
     text-align: center;
 }
 
-/* Botón de sortear título */
-.button-draw {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10px 40px;
-    color: var(--color-white);
-    background-color: var(--color-button);
-    font-size: 16px;
-}
-
-.button-draw img {
-    margin-right: 40px;
-}
-
-.button-draw:hover {
-    background-color: var(--color-button-hover);
+/* Botones deshabilitados */
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }

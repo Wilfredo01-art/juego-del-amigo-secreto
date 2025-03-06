@@ -1,61 +1,84 @@
-// El principal objetivo de este desafío es fortalecer tus habilidades en lógica de programación. Aquí deberás desarrollar la lógica para resolver el problema.
-let listaAmigos = [];
+// Lista para almacenar los nombres de los amigos
+let amigos = [];
 
+/**
+ * Agrega un amigo a la lista
+ */
 function agregarAmigo() {
-    let nombre = document.getElementById("amigo").value;
-    if (nombre) {
-        let nuevoAmigo = {
-            nombre: nombre
-        };
-        listaAmigos.push(nuevoAmigo);
-        actualizarListaAmigos();
-        document.getElementById("amigo").value = "";
-    }
-}
+    let input = document.getElementById("amigo");
+    let nombre = input.value.trim(); // Elimina espacios en blanco al inicio y final
 
-function actualizarListaAmigos() {
-    let lista = document.getElementById("listaAmigos");
-    lista.innerHTML = "";
-    let contador = document.getElementById("contador");
-    contador.textContent = listaAmigos.length;
-    listaAmigos.forEach(amigo => {
-        let li = document.createElement("li");
-        li.textContent = amigo.nombre;
-        lista.appendChild(li);
-    });
-}
-
-function sortearAmigo() {
-    if (listaAmigos.length < 2) {
-        alert("Necesitas al menos 2 amigos para hacer el sorteo.");
+    // Validación: No permitir nombres vacíos o repetidos
+    if (nombre === "" || amigos.includes(nombre)) {
+        alert("Ingresa un nombre válido y que no esté repetido.");
         return;
     }
 
-    let amigosSorteados = [...listaAmigos];
-    amigosSorteados.sort(() => Math.random() - 0.5);
+    amigos.push(nombre); // Agrega el nombre a la lista
+    actualizarLista(); // Actualiza la lista visual en HTML
+    input.value = ""; // Limpia el campo de entrada
+    verificarBotones(); // Habilita o deshabilita botones según la cantidad de amigos
+}
 
-    let resultado = amigosSorteados.map((amigo, index) => {
-        let siguienteIndex = (index + 1) % amigosSorteados.length;
-        return `${amigo.nombre} le regala a ${amigosSorteados[siguienteIndex].nombre}`;
+/**
+ * Muestra la lista actual de amigos en pantalla
+ */
+function actualizarLista() {
+    let lista = document.getElementById("listaAmigos");
+    lista.innerHTML = ""; // Limpia la lista antes de volver a generarla
+
+    amigos.forEach((nombre, index) => {
+        let li = document.createElement("li"); // Crea un elemento <li>
+        li.textContent = nombre; // Agrega el nombre dentro de la lista
+
+        // Botón para eliminar un amigo de la lista
+        let botonEliminar = document.createElement("button");
+        botonEliminar.textContent = "❌"; // Emoji de eliminar
+        botonEliminar.onclick = () => eliminarAmigo(index); // Asigna función de eliminar
+
+        li.appendChild(botonEliminar); // Agrega el botón dentro del <li>
+        lista.appendChild(li); // Agrega el <li> a la lista
     });
+}
 
+/**
+ * Elimina un amigo de la lista según su índice
+ * @param {number} index - Posición del amigo en la lista
+ */
+function eliminarAmigo(index) {
+    amigos.splice(index, 1); // Elimina el amigo de la lista
+    actualizarLista(); // Refresca la lista en pantalla
+    verificarBotones(); // Verifica si hay que deshabilitar botones
+}
+
+/**
+ * Habilita o deshabilita los botones de sorteo y reinicio según la cantidad de amigos
+ */
+function verificarBotones() {
+    document.querySelector(".button-draw").disabled = amigos.length < 2; // Necesita al menos 2 amigos para sortear
+    document.querySelector(".button-reset").disabled = amigos.length === 0; // Se desactiva si no hay nombres
+}
+
+/**
+ * Sortea un solo nombre de la lista y lo muestra en pantalla
+ */
+function sortearAmigo() {
     let resultadoLista = document.getElementById("resultado");
-    resultadoLista.innerHTML = "";
-    resultado.forEach(item => {
-        let li = document.createElement("li");
-        li.textContent = item;
-        resultadoLista.appendChild(li);
-    });
+    resultadoLista.innerHTML = ""; // Limpia cualquier resultado anterior
 
-    reiniciarJuego();
+    let amigoElegido = amigos[Math.floor(Math.random() * amigos.length)]; // Selecciona un nombre aleatorio
+
+    let li = document.createElement("li"); // Crea un nuevo elemento <li>
+    li.textContent = `${amigoElegido} ✅`; // Muestra el nombre del ganador con emoji de check ✅
+    resultadoLista.appendChild(li); // Agrega el ganador a la lista de resultados
 }
 
-function reiniciarJuego() {
-    listaAmigos = [];
-    actualizarListaAmigos();
-    console.log("El juego ha sido reiniciado.");
+/**
+ * Reinicia el sorteo eliminando todos los nombres y limpiando la pantalla
+ */
+function reiniciarSorteo() {
+    amigos = []; // Vacía la lista de amigos
+    document.getElementById("listaAmigos").innerHTML = ""; // Borra la lista visual
+    document.getElementById("resultado").innerHTML = ""; // Borra el resultado del sorteo
+    verificarBotones(); // Deshabilita los botones
 }
-
-// Ejemplo de cómo podrías llamar a estas funciones en tu página web
-document.querySelector(".button-add").addEventListener("click", agregarAmigo);
-document.querySelector(".button-draw").addEventListener("click", sortearAmigo);
